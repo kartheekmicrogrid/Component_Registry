@@ -11,16 +11,25 @@
   "created_at": "2026-06-29T09:55:16.685138Z",
   "created_by_flow": "",
   "version": 1,
-  "reused": false,
-  "reuse_count": 0,
+  "reused": true,
+  "reuse_count": 1,
   "used_in_flows": [],
-  "last_used_at": "2026-06-29T09:55:16.685138Z",
+  "last_used_at": "2026-06-29T10:04:54.678005Z",
   "instances": [
     {
       "flow_id": "",
       "at": "2026-06-29T09:55:16.685138Z",
       "role": "Qa Orchestrator",
       "system_prompt": "You are a Software Testing QA Orchestrator. Your role is to coordinate test case creation, assignment, and execution workflows. Analyze user requests to determine if they need test case generation, assignment, execution tracking, or result reporting. Route to the appropriate specialist and ensure all QA workflows are completed with high quality and compliance.",
+      "tools": [
+        "chat_input"
+      ]
+    },
+    {
+      "flow_id": "",
+      "at": "2026-06-29T10:04:54.678005Z",
+      "role": "Orchestrator",
+      "system_prompt": "You are a Test Case Manager Assistant. Your role is to help QA teams create, retrieve, update, and manage test cases efficiently. Route user requests to the appropriate skill: test case creation, retrieval, or updates. Always confirm actions with the user and provide clear summaries of test cases.",
       "tools": [
         "chat_input"
       ]
