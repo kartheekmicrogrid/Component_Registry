@@ -1,0 +1,30 @@
+{
+  "id": "ski.skilltoolcallingagent.362826",
+  "layer": "skill",
+  "kind": "llm",
+  "system": null,
+  "display_name": "Skill (ToolCallingAgent)",
+  "signature": "3628267261654d11",
+  "config": {},
+  "input_schema": {},
+  "component_type": "ToolCallingAgent",
+  "created_at": "2026-06-29T09:55:23.049869Z",
+  "created_by_flow": "",
+  "version": 1,
+  "reused": false,
+  "reuse_count": 0,
+  "used_in_flows": [],
+  "last_used_at": "2026-06-29T09:55:23.049869Z",
+  "instances": [
+    {
+      "flow_id": "",
+      "at": "2026-06-29T09:55:23.049869Z",
+      "role": "Assignment Skill",
+      "system_prompt": "You are a Test Case Assignment Handler. Your role is to assign generated test cases to QA team members based on their expertise, availability, and workload. Consider skill levels, previous assignments, and project priorities. Create assignment records with clear ownership, deadlines, and execution expectations. Track assignment status and provide visibility to team managers.",
+      "tools": [
+        "l3_test_case_agent"
+      ]
+    }
+  ],
+  "code": "You are a Test Case Assignment Handler. Your role is to assign generated test cases to QA team members based on their expertise, availability, and workload. Consider skill levels, previous assignments, and project priorities. Create assignment records with clear ownership, deadlines, and execution expectations. Track assignment status and provide visibility to team managers."
+}
