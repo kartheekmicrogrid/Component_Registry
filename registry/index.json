@@ -57,6 +57,29 @@
           ]
         }
       ]
+    },
+    "cap.testcasemanagementsystem.rest.0df91a": {
+      "id": "cap.testcasemanagementsystem.rest.0df91a",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "Test Case Management System",
+      "display_name": "Test Case Creation",
+      "signature": "0df91a68a22e330b",
+      "config": {
+        "method": "POST",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{\"project_id\": \"PROJ-001\", \"feature_name\": \"User Login Module\", \"requirement\": \"Enable secure user authentication\", \"test_case_title\": \"Verify successful login with valid credentials\", \"test_steps\": [\"Open login page\", \"Enter valid username and password\", \"Click login button\", \"Verify user dashboard loads\"], \"expected_result\": \"User successfully authenticated and redirected to dashboard\", \"test_data\": {\"username\": \"test_user@example.com\", \"password\": \"SecurePass123!\"}, \"test_type\": \"Functional\", \"severity\": \"High\", \"priority\": \"P1\"}",
+      "component_type": null,
+      "created_at": "2026-06-29T09:55:25.972992Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-29T09:55:25.972992Z",
+      "instances": []
     }
   }
 }
