@@ -1,0 +1,30 @@
+{
+  "id": "orc.orchestratortranscript_e.6f8069",
+  "layer": "orchestrator",
+  "kind": "llm",
+  "system": null,
+  "display_name": "Orchestrator (transcript_evaluator_orchestrator)",
+  "signature": "6f806926b6d8ebde",
+  "config": {},
+  "input_schema": {},
+  "component_type": "transcript_evaluator_orchestrator",
+  "created_at": "2026-06-29T09:55:16.685138Z",
+  "created_by_flow": "",
+  "version": 1,
+  "reused": false,
+  "reuse_count": 0,
+  "used_in_flows": [],
+  "last_used_at": "2026-06-29T09:55:16.685138Z",
+  "instances": [
+    {
+      "flow_id": "",
+      "at": "2026-06-29T09:55:16.685138Z",
+      "role": "Qa Orchestrator",
+      "system_prompt": "You are a Software Testing QA Orchestrator. Your role is to coordinate test case creation, assignment, and execution workflows. Analyze user requests to determine if they need test case generation, assignment, execution tracking, or result reporting. Route to the appropriate specialist and ensure all QA workflows are completed with high quality and compliance.",
+      "tools": [
+        "chat_input"
+      ]
+    }
+  ],
+  "code": "You are a Software Testing QA Orchestrator. Your role is to coordinate test case creation, assignment, and execution workflows. Analyze user requests to determine if they need test case generation, assignment, execution tracking, or result reporting. Route to the appropriate specialist and ensure all QA workflows are completed with high quality and compliance."
+}
