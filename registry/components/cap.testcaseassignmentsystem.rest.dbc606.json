@@ -1,0 +1,24 @@
+{
+  "id": "cap.testcaseassignmentsystem.rest.dbc606",
+  "layer": "capability",
+  "kind": "rest",
+  "system": "Test Case Assignment System",
+  "display_name": "Test Case Assignment",
+  "signature": "dbc606242449e794",
+  "config": {
+    "method": "POST",
+    "auth_type": "Bearer",
+    "body_type": "json"
+  },
+  "input_schema": "{\"test_case_id\": \"TC-100524\", \"assigned_to_email\": \"qa_engineer@company.com\", \"assigned_to_name\": \"Sarah Johnson\", \"assignment_date\": \"2026-03-06\", \"due_date\": \"2026-03-10\", \"execution_environment\": \"Staging\", \"priority\": \"P1\", \"notes\": \"Execute on Chrome and Firefox browsers\"}",
+  "component_type": null,
+  "created_at": "2026-06-29T09:55:48.219889Z",
+  "created_by_flow": "",
+  "version": 1,
+  "reused": false,
+  "reuse_count": 0,
+  "used_in_flows": [],
+  "last_used_at": "2026-06-29T09:55:48.219889Z",
+  "instances": [],
+  "code": "import json\nfrom lfx.custom import Component\nfrom lfx.inputs.inputs import MessageTextInput\nfrom lfx.io import Output\nfrom lfx.schema.data import Data\n\n\nclass ToolCallingAgentComponent_0002(Component):\n    \"\"\"Synthetic data capability for Test Case Assignment System. Returns realistic generated sample data\n    instead of calling a real API, so the agent can be tested end-to-end before the real\n    system is connected. Swap to a real connector later by providing the API details.\"\"\"\n\n    display_name = \"Test Case Assignment\"\n    description = \"Returns synthetic/test data for Test Case Assignment System (no real API call). Provide 'payload' with the request fields.\"\n    icon = \"TestTube\"\n    name = \"ToolCallingAgentComponent_0002\"\n\n    inputs = [\n        MessageTextInput(name=\"payload\", display_name=\"Request Payload\",\n                         info=\"The request fields (JSON). Echoed back in the synthetic response.\",\n                         value=\"{}\", required=False, tool_mode=True),\n        MessageTextInput(name=\"sample_response\", display_name=\"Sample Response (JSON)\",\n                         info=\"The synthetic response template returned to the agent.\",\n                         value=\"{\\\"status\\\": \\\"Active\\\", \\\"assignment_id\\\": \\\"ASSIGN-50234\\\", \\\"test_case_id\\\": \\\"TC-100524\\\", \\\"assigned_to\\\": {\\\"name\\\": \\\"Sarah Johnson\\\", \\\"email\\\": \\\"qa_engineer@company.com\\\", \\\"role\\\": \\\"Senior QA Engineer\\\", \\\"current_workload\\\": \\\"4 active assignments\\\"}, \\\"assignment_date\\\": \\\"2026-03-06T14:35:00Z\\\", \\\"due_date\\\": \\\"2026-03-10T17:00:00Z\\\", \\\"execution_environment\\\": \\\"Staging\\\", \\\"estimated_completion\\\": \\\"2026-03-09T10:00:00Z\\\", \\\"notification_sent\\\": true, \\\"message\\\": \\\"Test case successfully assigned to Sarah Johnson. Notification sent.\\\"}\", required=False),\n    ]\n\n    outputs = [\n        Output(name=\"result\", display_name=\"Result\", method=\"call_api\", tool_mode=True),\n    ]\n\n    def call_api(self) -> Data:\n        try:\n            try:\n                sent = json.loads(getattr(self, \"payload\", \"\") or \"{}\")\n            except Exception:\n                sent = {}\n            try:\n                sample = json.loads(getattr(self, \"sample_response\", \"\") or \"{}\")\n            except Exception:\n                sample = {}\n            # Merge submitted fields into the sample so the response reflects the input.\n            if isinstance(sample, dict):\n                merged = dict(sample)\n                if isinstance(sent, dict):\n                    for k, v in sent.items():\n                        merged.setdefault(k, v)\n                result = {\"capability\": \"Test Case Assignment\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": merged}\n            else:\n                result = {\"capability\": \"Test Case Assignment\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": sample}\n        except Exception as e:\n            result = {\"capability\": \"Test Case Assignment\", \"status\": \"error\", \"synthetic\": True, \"error\": str(e)}\n        self.status = result\n        return Data(data=result)\n"
+}
