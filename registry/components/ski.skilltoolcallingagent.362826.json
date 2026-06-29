@@ -11,16 +11,25 @@
   "created_at": "2026-06-29T09:55:23.049869Z",
   "created_by_flow": "",
   "version": 1,
-  "reused": false,
-  "reuse_count": 0,
+  "reused": true,
+  "reuse_count": 1,
   "used_in_flows": [],
-  "last_used_at": "2026-06-29T09:55:23.049869Z",
+  "last_used_at": "2026-06-29T10:04:55.740311Z",
   "instances": [
     {
       "flow_id": "",
       "at": "2026-06-29T09:55:23.049869Z",
       "role": "Assignment Skill",
       "system_prompt": "You are a Test Case Assignment Handler. Your role is to assign generated test cases to QA team members based on their expertise, availability, and workload. Consider skill levels, previous assignments, and project priorities. Create assignment records with clear ownership, deadlines, and execution expectations. Track assignment status and provide visibility to team managers.",
+      "tools": [
+        "l3_test_case_agent"
+      ]
+    },
+    {
+      "flow_id": "",
+      "at": "2026-06-29T10:04:55.740311Z",
+      "role": "Test Submission Skill",
+      "system_prompt": "You are the Test Case Submission Specialist. Your role is to take the structured test case data and store it. Call the Test Case Storage system with the formatted data. Confirm successful submission and provide the user with a test case ID and summary.",
       "tools": [
         "l3_test_case_agent"
       ]
