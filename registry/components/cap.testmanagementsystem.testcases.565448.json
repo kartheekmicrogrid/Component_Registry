@@ -1,0 +1,25 @@
+{
+  "id": "cap.testmanagementsystem.testcases.565448",
+  "layer": "capability",
+  "kind": "rest",
+  "system": "Test Management System",
+  "display_name": "Test Case Storage",
+  "signature": "56544809fefde872",
+  "config": {
+    "path": "/test-cases",
+    "method": "POST",
+    "auth_type": "Bearer",
+    "body_type": "json"
+  },
+  "input_schema": "{\"title\": \"\", \"description\": \"\", \"preconditions\": \"\", \"steps\": [], \"expected_result\": \"\", \"priority\": \"medium\", \"module\": \"\", \"tags\": []}",
+  "component_type": null,
+  "created_at": "2026-06-29T10:04:55.740608Z",
+  "created_by_flow": "",
+  "version": 1,
+  "reused": false,
+  "reuse_count": 0,
+  "used_in_flows": [],
+  "last_used_at": "2026-06-29T10:04:55.740608Z",
+  "instances": [],
+  "code": "import json\nfrom lfx.custom import Component\nfrom lfx.inputs.inputs import MessageTextInput\nfrom lfx.io import Output\nfrom lfx.schema.data import Data\n\n\nclass ToolCallingAgentComponent_0001(Component):\n    \"\"\"Synthetic data capability for Test Management System. Returns realistic generated sample data\n    instead of calling a real API, so the agent can be tested end-to-end before the real\n    system is connected. Swap to a real connector later by providing the API details.\"\"\"\n\n    display_name = \"Test Case Storage\"\n    description = \"Returns synthetic/test data for Test Management System (no real API call). Provide 'payload' with the request fields.\"\n    icon = \"TestTube\"\n    name = \"ToolCallingAgentComponent_0001\"\n\n    inputs = [\n        MessageTextInput(name=\"payload\", display_name=\"Request Payload\",\n                         info=\"The request fields (JSON). Echoed back in the synthetic response.\",\n                         value=\"{}\", required=False, tool_mode=True),\n        MessageTextInput(name=\"sample_response\", display_name=\"Sample Response (JSON)\",\n                         info=\"The synthetic response template returned to the agent.\",\n                         value=\"{\\\"id\\\": \\\"TC-2024-001\\\", \\\"title\\\": \\\"User Login with Valid Credentials\\\", \\\"description\\\": \\\"Verify that a user can successfully log in with valid email and password\\\", \\\"preconditions\\\": \\\"User is on the login page; User has a valid account\\\", \\\"steps\\\": [\\\"Enter valid email address\\\", \\\"Enter valid password\\\", \\\"Click Login button\\\"], \\\"expected_result\\\": \\\"User is logged in and redirected to dashboard\\\", \\\"priority\\\": \\\"high\\\", \\\"module\\\": \\\"Authentication\\\", \\\"tags\\\": [\\\"smoke\\\", \\\"critical\\\"], \\\"created_at\\\": \\\"2024-01-15T10:30:00Z\\\", \\\"status\\\": \\\"active\\\"}\", required=False),\n    ]\n\n    outputs = [\n        Output(name=\"result\", display_name=\"Result\", method=\"call_api\", tool_mode=True),\n    ]\n\n    def call_api(self) -> Data:\n        try:\n            try:\n                sent = json.loads(getattr(self, \"payload\", \"\") or \"{}\")\n            except Exception:\n                sent = {}\n            try:\n                sample = json.loads(getattr(self, \"sample_response\", \"\") or \"{}\")\n            except Exception:\n                sample = {}\n            # Merge submitted fields into the sample so the response reflects the input.\n            if isinstance(sample, dict):\n                merged = dict(sample)\n                if isinstance(sent, dict):\n                    for k, v in sent.items():\n                        merged.setdefault(k, v)\n                result = {\"capability\": \"Test Case Storage\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": merged}\n            else:\n                result = {\"capability\": \"Test Case Storage\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": sample}\n        except Exception as e:\n            result = {\"capability\": \"Test Case Storage\", \"status\": \"error\", \"synthetic\": True, \"error\": str(e)}\n        self.status = result\n        return Data(data=result)\n"
+}
