@@ -80,6 +80,29 @@
       "used_in_flows": [],
       "last_used_at": "2026-06-29T09:55:25.972992Z",
       "instances": []
+    },
+    "cap.testcaseassignmentsystem.rest.dbc606": {
+      "id": "cap.testcaseassignmentsystem.rest.dbc606",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "Test Case Assignment System",
+      "display_name": "Test Case Assignment",
+      "signature": "dbc606242449e794",
+      "config": {
+        "method": "POST",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{\"test_case_id\": \"TC-100524\", \"assigned_to_email\": \"qa_engineer@company.com\", \"assigned_to_name\": \"Sarah Johnson\", \"assignment_date\": \"2026-03-06\", \"due_date\": \"2026-03-10\", \"execution_environment\": \"Staging\", \"priority\": \"P1\", \"notes\": \"Execute on Chrome and Firefox browsers\"}",
+      "component_type": null,
+      "created_at": "2026-06-29T09:55:48.219889Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-29T09:55:48.219889Z",
+      "instances": []
     }
   }
 }
