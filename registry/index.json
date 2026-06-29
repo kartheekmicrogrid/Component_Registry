@@ -13,16 +13,25 @@
       "created_at": "2026-06-29T09:55:16.685138Z",
       "created_by_flow": "",
       "version": 1,
-      "reused": false,
-      "reuse_count": 0,
+      "reused": true,
+      "reuse_count": 1,
       "used_in_flows": [],
-      "last_used_at": "2026-06-29T09:55:16.685138Z",
+      "last_used_at": "2026-06-29T10:04:54.678005Z",
       "instances": [
         {
           "flow_id": "",
           "at": "2026-06-29T09:55:16.685138Z",
           "role": "Qa Orchestrator",
           "system_prompt": "You are a Software Testing QA Orchestrator. Your role is to coordinate test case creation, assignment, and execution workflows. Analyze user requests to determine if they need test case generation, assignment, execution tracking, or result reporting. Route to the appropriate specialist and ensure all QA workflows are completed with high quality and compliance.",
+          "tools": [
+            "chat_input"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-29T10:04:54.678005Z",
+          "role": "Orchestrator",
+          "system_prompt": "You are a Test Case Manager Assistant. Your role is to help QA teams create, retrieve, update, and manage test cases efficiently. Route user requests to the appropriate skill: test case creation, retrieval, or updates. Always confirm actions with the user and provide clear summaries of test cases.",
           "tools": [
             "chat_input"
           ]
@@ -42,16 +51,25 @@
       "created_at": "2026-06-29T09:55:23.049869Z",
       "created_by_flow": "",
       "version": 1,
-      "reused": false,
-      "reuse_count": 0,
+      "reused": true,
+      "reuse_count": 1,
       "used_in_flows": [],
-      "last_used_at": "2026-06-29T09:55:23.049869Z",
+      "last_used_at": "2026-06-29T10:04:55.740311Z",
       "instances": [
         {
           "flow_id": "",
           "at": "2026-06-29T09:55:23.049869Z",
           "role": "Assignment Skill",
           "system_prompt": "You are a Test Case Assignment Handler. Your role is to assign generated test cases to QA team members based on their expertise, availability, and workload. Consider skill levels, previous assignments, and project priorities. Create assignment records with clear ownership, deadlines, and execution expectations. Track assignment status and provide visibility to team managers.",
+          "tools": [
+            "l3_test_case_agent"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-29T10:04:55.740311Z",
+          "role": "Test Submission Skill",
+          "system_prompt": "You are the Test Case Submission Specialist. Your role is to take the structured test case data and store it. Call the Test Case Storage system with the formatted data. Confirm successful submission and provide the user with a test case ID and summary.",
           "tools": [
             "l3_test_case_agent"
           ]
@@ -102,6 +120,59 @@
       "reuse_count": 0,
       "used_in_flows": [],
       "last_used_at": "2026-06-29T09:55:48.219889Z",
+      "instances": []
+    },
+    "age.agenttoolcallingagent.8c27e9": {
+      "id": "age.agenttoolcallingagent.8c27e9",
+      "layer": "agent",
+      "kind": "llm",
+      "system": null,
+      "display_name": "Agent (ToolCallingAgent)",
+      "signature": "8c27e967cb338afe",
+      "config": {},
+      "input_schema": {},
+      "component_type": "ToolCallingAgent",
+      "created_at": "2026-06-29T10:04:54.679896Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-29T10:04:54.679896Z",
+      "instances": [
+        {
+          "flow_id": "",
+          "at": "2026-06-29T10:04:54.679896Z",
+          "role": "Test Case Agent",
+          "system_prompt": "You are the Test Case Handler. Your job is to understand what test cases the user wants to create or retrieve. For creation, gather details like: test case title, description, preconditions, steps, expected result, and priority. For retrieval, identify what the user is looking for. Be conversational and clarify details as needed.",
+          "tools": [
+            "l4_orchestrator"
+          ]
+        }
+      ]
+    },
+    "cap.testmanagementsystem.testcases.565448": {
+      "id": "cap.testmanagementsystem.testcases.565448",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "Test Management System",
+      "display_name": "Test Case Storage",
+      "signature": "56544809fefde872",
+      "config": {
+        "path": "/test-cases",
+        "method": "POST",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{\"title\": \"\", \"description\": \"\", \"preconditions\": \"\", \"steps\": [], \"expected_result\": \"\", \"priority\": \"medium\", \"module\": \"\", \"tags\": []}",
+      "component_type": null,
+      "created_at": "2026-06-29T10:04:55.740608Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-29T10:04:55.740608Z",
       "instances": []
     }
   }
