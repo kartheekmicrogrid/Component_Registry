@@ -1,0 +1,25 @@
+{
+  "id": "cap.emailservice.op.33a3e9",
+  "layer": "capability",
+  "kind": "smtp_email",
+  "system": "Email Service",
+  "display_name": "Send Validation Email",
+  "signature": "33a3e92a100b7497",
+  "config": {
+    "path": "/",
+    "method": "GET",
+    "auth_type": "Bearer",
+    "body_type": "json"
+  },
+  "input_schema": "{}",
+  "component_type": null,
+  "created_at": "2026-06-30T07:22:15.863669Z",
+  "created_by_flow": "",
+  "version": 1,
+  "reused": false,
+  "reuse_count": 0,
+  "used_in_flows": [],
+  "last_used_at": "2026-06-30T07:22:15.863669Z",
+  "instances": [],
+  "code": "import json\nfrom lfx.custom import Component\nfrom lfx.inputs.inputs import MessageTextInput\nfrom lfx.io import Output\nfrom lfx.schema.data import Data\n\n\nclass ToolCallingAgentComponent_0007(Component):\n    \"\"\"Synthetic data capability for Email Service. Returns realistic generated sample data\n    instead of calling a real API, so the agent can be tested end-to-end before the real\n    system is connected. Swap to a real connector later by providing the API details.\"\"\"\n\n    display_name = \"Send Validation Email\"\n    description = \"Returns synthetic/test data for Email Service (no real API call). Provide 'payload' with the request fields.\"\n    icon = \"TestTube\"\n    name = \"ToolCallingAgentComponent_0007\"\n\n    inputs = [\n        MessageTextInput(name=\"payload\", display_name=\"Request Payload\",\n                         info=\"The request fields (JSON). Echoed back in the synthetic response.\",\n                         value=\"{}\", required=False, tool_mode=True),\n        MessageTextInput(name=\"sample_response\", display_name=\"Sample Response (JSON)\",\n                         info=\"The synthetic response template returned to the agent.\",\n                         value=\"{\\\"status\\\": \\\"sent\\\", \\\"message_id\\\": \\\"msg_20250608_synthetic_12345\\\", \\\"recipient\\\": \\\"user@example.com\\\", \\\"sent_at\\\": \\\"2025-06-08T10:30:00Z\\\"}\", required=False),\n    ]\n\n    outputs = [\n        Output(name=\"result\", display_name=\"Result\", method=\"call_api\", tool_mode=True),\n    ]\n\n    def call_api(self) -> Data:\n        try:\n            try:\n                sent = json.loads(getattr(self, \"payload\", \"\") or \"{}\")\n            except Exception:\n                sent = {}\n            try:\n                sample = json.loads(getattr(self, \"sample_response\", \"\") or \"{}\")\n            except Exception:\n                sample = {}\n            # Merge submitted fields into the sample so the response reflects the input.\n            if isinstance(sample, dict):\n                merged = dict(sample)\n                if isinstance(sent, dict):\n                    for k, v in sent.items():\n                        merged.setdefault(k, v)\n                result = {\"capability\": \"Send Validation Email\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": merged}\n            else:\n                result = {\"capability\": \"Send Validation Email\", \"status\": \"completed\",\n                          \"synthetic\": True, \"result\": sample}\n        except Exception as e:\n            result = {\"capability\": \"Send Validation Email\", \"status\": \"error\", \"synthetic\": True, \"error\": str(e)}\n        self.status = result\n        return Data(data=result)\n"
+}
