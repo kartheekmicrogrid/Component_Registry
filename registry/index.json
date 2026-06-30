@@ -14,9 +14,9 @@
       "created_by_flow": "",
       "version": 1,
       "reused": true,
-      "reuse_count": 2,
+      "reuse_count": 3,
       "used_in_flows": [],
-      "last_used_at": "2026-06-30T07:09:14.558490Z",
+      "last_used_at": "2026-06-30T07:22:08.826580Z",
       "instances": [
         {
           "flow_id": "",
@@ -41,6 +41,15 @@
           "at": "2026-06-30T07:09:14.558490Z",
           "role": "Orch",
           "system_prompt": "You are the Claim Invoice Reconciliation Assistant. Your role is to:\n1. Collect the invoice file and policy number from the user.\n2. Coordinate OCR extraction, CRM lookup, validation checks, CRM updates, email formatting, and email send.\n3. Present the final validation result and email summary to the user in a clear, readable format.\nAlways confirm the policy number and invoice file before proceeding.",
+          "tools": [
+            "chat_input"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:22:08.826580Z",
+          "role": "Claim Orchestrator",
+          "system_prompt": "You are the Claim Invoice Reconciliation Assistant. Your role is to:\n1. Accept a cloud URL pointing to an invoice PDF/image and a policy number from the user\n2. Immediately trigger the OCR extraction from that URL\n3. Fetch the matching CRM claim record\n4. Run validation checks (patient name, claim name, treatment date, outstanding amount)\n5. Update the CRM with results\n6. Create a new claim record if needed\n7. Format and send a color-coded email summary\n8. Return the final validation result to the user\n\nDo NOT ask for confirmation. Process the URL and policy number directly and complete the entire flow.",
           "tools": [
             "chat_input"
           ]
@@ -356,6 +365,174 @@
       "reuse_count": 0,
       "used_in_flows": [],
       "last_used_at": "2026-06-30T07:09:53.822182Z",
+      "instances": []
+    },
+    "cap.invoicedocumentprocessing.op.81de18": {
+      "id": "cap.invoicedocumentprocessing.op.81de18",
+      "layer": "capability",
+      "kind": "ocr",
+      "system": "Invoice Document Processing",
+      "display_name": "Extract Invoice Data from URL",
+      "signature": "81de18d60ad81988",
+      "config": {
+        "path": "/",
+        "method": "GET",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:08.826893Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:08.826893Z",
+      "instances": []
+    },
+    "cap.crmsystem.api_insured_policy_policy_numb.3c37d6": {
+      "id": "cap.crmsystem.api_insured_policy_policy_numb.3c37d6",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM System",
+      "display_name": "Get Insurance Data From CRM",
+      "signature": "3c37d6b9a438a79d",
+      "config": {
+        "path": "/api/insured/policy/{policy_number}",
+        "method": "GET",
+        "auth_type": "None",
+        "body_type": "none"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:10.060605Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:10.060605Z",
+      "instances": []
+    },
+    "cap.validationengine.api_validate_claim.fe26fa": {
+      "id": "cap.validationengine.api_validate_claim.fe26fa",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "Validation Engine",
+      "display_name": "Run Claim Validation Checks",
+      "signature": "fe26fa05bb1aa24a",
+      "config": {
+        "path": "/api/validate/claim",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "json"
+      },
+      "input_schema": "{\"invoice_patient_name\": \"\", \"crm_insured_name\": \"\", \"invoice_treatment_date\": \"\", \"crm_start_date\": \"\", \"crm_expiry_date\": \"\", \"invoice_outstanding_amount\": \"\", \"crm_sum_insured\": \"\", \"policy_number\": \"\"}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:11.295334Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:11.295334Z",
+      "instances": []
+    },
+    "cap.crmsystem.api_claims_history_policy_numb.89ae07": {
+      "id": "cap.crmsystem.api_claims_history_policy_numb.89ae07",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM System",
+      "display_name": "Update Claim Status",
+      "signature": "89ae077653816230",
+      "config": {
+        "path": "/api/claims/history/{policy_number}",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "raw"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:12.419332Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:12.419332Z",
+      "instances": []
+    },
+    "cap.crmsystem.api_claims_policy_policy_numbe.4884ab": {
+      "id": "cap.crmsystem.api_claims_policy_policy_numbe.4884ab",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM System",
+      "display_name": "Create Claim Record",
+      "signature": "4884abec6165c719",
+      "config": {
+        "path": "/api/claims/policy/{policy_number}",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "json"
+      },
+      "input_schema": "{\"policy_number\": \"\", \"claim_id\": \"\", \"insured_name\": \"\", \"treatment_date\": \"\", \"invoice_amount\": \"\", \"outstanding_amount\": \"\", \"validation_status\": \"\"}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:13.657895Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:13.657895Z",
+      "instances": []
+    },
+    "cap.emailformatter.api_email_claimsummary.92adbf": {
+      "id": "cap.emailformatter.api_email_claimsummary.92adbf",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "Email Formatter",
+      "display_name": "Format Color-Coded Email Summary",
+      "signature": "92adbf9afc46a1a2",
+      "config": {
+        "path": "/api/email/claim-summary",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "json"
+      },
+      "input_schema": "{\"invoice_data\": {}, \"crm_data\": {}, \"validation_result\": {}}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:14.718990Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:14.718990Z",
+      "instances": []
+    },
+    "cap.emailservice.op.33a3e9": {
+      "id": "cap.emailservice.op.33a3e9",
+      "layer": "capability",
+      "kind": "smtp_email",
+      "system": "Email Service",
+      "display_name": "Send Validation Email",
+      "signature": "33a3e92a100b7497",
+      "config": {
+        "path": "/",
+        "method": "GET",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:22:15.863669Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:22:15.863669Z",
       "instances": []
     }
   }
