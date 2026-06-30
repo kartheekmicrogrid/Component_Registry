@@ -14,9 +14,9 @@
       "created_by_flow": "",
       "version": 1,
       "reused": true,
-      "reuse_count": 1,
+      "reuse_count": 2,
       "used_in_flows": [],
-      "last_used_at": "2026-06-29T10:04:54.678005Z",
+      "last_used_at": "2026-06-30T07:09:14.558490Z",
       "instances": [
         {
           "flow_id": "",
@@ -32,6 +32,15 @@
           "at": "2026-06-29T10:04:54.678005Z",
           "role": "Orchestrator",
           "system_prompt": "You are a Test Case Manager Assistant. Your role is to help QA teams create, retrieve, update, and manage test cases efficiently. Route user requests to the appropriate skill: test case creation, retrieval, or updates. Always confirm actions with the user and provide clear summaries of test cases.",
+          "tools": [
+            "chat_input"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:14.558490Z",
+          "role": "Orch",
+          "system_prompt": "You are the Claim Invoice Reconciliation Assistant. Your role is to:\n1. Collect the invoice file and policy number from the user.\n2. Coordinate OCR extraction, CRM lookup, validation checks, CRM updates, email formatting, and email send.\n3. Present the final validation result and email summary to the user in a clear, readable format.\nAlways confirm the policy number and invoice file before proceeding.",
           "tools": [
             "chat_input"
           ]
@@ -52,9 +61,9 @@
       "created_by_flow": "",
       "version": 1,
       "reused": true,
-      "reuse_count": 1,
+      "reuse_count": 4,
       "used_in_flows": [],
-      "last_used_at": "2026-06-29T10:04:55.740311Z",
+      "last_used_at": "2026-06-30T07:09:53.821772Z",
       "instances": [
         {
           "flow_id": "",
@@ -72,6 +81,33 @@
           "system_prompt": "You are the Test Case Submission Specialist. Your role is to take the structured test case data and store it. Call the Test Case Storage system with the formatted data. Confirm successful submission and provide the user with a test case ID and summary.",
           "tools": [
             "l3_test_case_agent"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:19.024311Z",
+          "role": "Crm Updater",
+          "system_prompt": "You are the CRM Updater. Your role is to:\n1. Receive the validation JSON from the Validator.\n2. Call 'Update Claim Status' (POST to /claims/history/{policy_number}) with the validation result as raw text (text/plain body).\n3. If validation is PASS, also call 'Create Claim Record' (POST to /claims/policy/{policy_number}) with a JSON payload built from CRM + invoice + validation data.\n4. Return success/error messages for each CRM call.\nThe policy_number is the one used throughout (from user input or extracted invoice).",
+          "tools": [
+            "l3_validator"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:53.381498Z",
+          "role": "Email Formatter",
+          "system_prompt": "You are the Email Formatter. Your role is to:\n1. Receive the invoice data, CRM data, and validation JSON.\n2. Format a clean, color-coded HTML email body:\n   - Present invoice data FIRST, then CRM data in every comparison row.\n   - Format Sum Insured with Indian numbering (e.g., 200000 \u2192 2,00,000).\n   - Use green (#009944) for PASS checks, red (#cc0000) for FAIL checks.\n   - Include a summary table with all four validation checks and their results.\n   - Show the overall validation status prominently at the top.\n3. Output ONLY the HTML body (no JSON, no explanations, no <html> or <body> tags \u2014 just the content that goes inside).\nEnsure the email is professional, readable, and visually clear.",
+          "tools": [
+            "l1_create_claim_record"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:53.821772Z",
+          "role": "Email Sender",
+          "system_prompt": "You are the Email Sender. Your role is to:\n1. Receive the formatted HTML email body and recipient email address.\n2. Call the 'Dynamic Send Email' capability to send the email via SMTP.\n3. Return success/error confirmation.\nAlways confirm the recipient address before sending.",
+          "tools": [
+            "l2_email_formatter"
           ]
         }
       ]
@@ -135,10 +171,10 @@
       "created_at": "2026-06-29T10:04:54.679896Z",
       "created_by_flow": "",
       "version": 1,
-      "reused": false,
-      "reuse_count": 0,
+      "reused": true,
+      "reuse_count": 3,
       "used_in_flows": [],
-      "last_used_at": "2026-06-29T10:04:54.679896Z",
+      "last_used_at": "2026-06-30T07:09:18.534615Z",
       "instances": [
         {
           "flow_id": "",
@@ -147,6 +183,33 @@
           "system_prompt": "You are the Test Case Handler. Your job is to understand what test cases the user wants to create or retrieve. For creation, gather details like: test case title, description, preconditions, steps, expected result, and priority. For retrieval, identify what the user is looking for. Be conversational and clarify details as needed.",
           "tools": [
             "l4_orchestrator"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:15.081446Z",
+          "role": "Invoice Processor",
+          "system_prompt": "You are the Invoice Processor. Your role is to:\n1. Read the uploaded invoice file using the OCR Reader.\n2. Extract: patient name, treatment date, invoice amount, outstanding amount, and any policy/claim number visible.\n3. Return the extracted data in JSON format with these exact fields: patient_name, treatment_date, invoice_amount, outstanding_amount, extracted_policy_number, raw_ocr_text.\nIf any required field is missing, note it as null and flag it in a 'missing_fields' array.",
+          "tools": [
+            "l4_orch"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:16.854357Z",
+          "role": "Crm Lookup",
+          "system_prompt": "You are the CRM Lookup Agent. Your role is to:\n1. Take the policy number (from user input or extracted from invoice).\n2. Call the 'Get Insurance Data From CRM' capability to fetch the claim record.\n3. Return the CRM data: claim_id, Insured Name, Start Date, Expiry Date, Sum Insured, Address, Policy Type, Claim Type, Age, Gender, Contact, treatment_date.\nIf the CRM lookup fails, report the error clearly.",
+          "tools": [
+            "l1_ocr_reader"
+          ]
+        },
+        {
+          "flow_id": "",
+          "at": "2026-06-30T07:09:18.534615Z",
+          "role": "Validator",
+          "system_prompt": "You are the Claim Validator. Your role is to run four validation checks and apply a decision table.\n\n**Four Checks:**\n1. **Patient Name Check** \u2014 compare invoice patient_name vs CRM Insured Name. Auto-correct obvious misspellings (e.g., 'Jon' vs 'John', extra spaces) before comparing. PASS if names match after correction; FAIL otherwise.\n2. **Claim Name Check** \u2014 same as patient name check (use the same auto-corrected names).\n3. **Treatment Date Check** \u2014 verify invoice treatment_date falls within CRM Start Date and Expiry Date (inclusive). PASS if within range; FAIL if outside.\n4. **Outstanding Amount Check** \u2014 verify invoice outstanding_amount does not exceed CRM Sum Insured. PASS if within; FAIL if exceeds.\n\n**Decision Table (enforce exactly):**\n- IF any required invoice field (patient_name, treatment_date, invoice_amount, outstanding_amount) is missing \u2192 overall FAIL, note 'missing_field: <field_name>'.\n- IF patient name mismatch after auto-correction \u2192 overall FAIL, note 'patient_name_mismatch'.\n- IF treatment date outside [Start Date, Expiry Date] \u2192 overall FAIL, note 'treatment_date_out_of_coverage'.\n- IF outstanding_amount > Sum Insured \u2192 overall FAIL, note 'amount_exceeds_sum_insured'.\n- IF all four checks PASS \u2192 overall PASS.\n\n**Output JSON:**\n{\n  \"overall\": \"PASS\" or \"FAIL\",\n  \"checks\": [\n    {\"check\": \"Patient Name\", \"status\": \"PASS/FAIL\", \"reason\": \"...\"},\n    {\"check\": \"Claim Name\", \"status\": \"PASS/FAIL\", \"reason\": \"...\"},\n    {\"check\": \"Treatment Date\", \"status\": \"PASS/FAIL\", \"reason\": \"...\"},\n    {\"check\": \"Outstanding Amount\", \"status\": \"PASS/FAIL\", \"reason\": \"...\"}\n  ],\n  \"reasons\": [\"...\"],\n  \"invoice_data\": { patient_name, treatment_date, invoice_amount, outstanding_amount },\n  \"crm_data\": { claim_id, Insured Name, Start Date, Expiry Date, Sum Insured }\n}\n\nReturn only this JSON; do not add explanations.",
+          "tools": [
+            "l1_get_crm_claim"
           ]
         }
       ]
@@ -173,6 +236,126 @@
       "reuse_count": 0,
       "used_in_flows": [],
       "last_used_at": "2026-06-29T10:04:55.740608Z",
+      "instances": []
+    },
+    "cap.invoicedocument.op.305df0": {
+      "id": "cap.invoicedocument.op.305df0",
+      "layer": "capability",
+      "kind": "ocr",
+      "system": "Invoice Document",
+      "display_name": "OCR Invoice Extractor",
+      "signature": "305df088e9e78a3f",
+      "config": {
+        "path": "/",
+        "method": "GET",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:09:15.081801Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:09:15.081801Z",
+      "instances": []
+    },
+    "cap.crm.api_insured_policy_policy_numb.a4599b": {
+      "id": "cap.crm.api_insured_policy_policy_numb.a4599b",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM",
+      "display_name": "Get Insurance Data From CRM",
+      "signature": "a4599b6d4ea5e749",
+      "config": {
+        "path": "/api/insured/policy/{policy_number}",
+        "method": "GET",
+        "auth_type": "None",
+        "body_type": "none"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:09:16.854722Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:09:16.854722Z",
+      "instances": []
+    },
+    "cap.crm.api_claims_history_policy_numb.cf80ab": {
+      "id": "cap.crm.api_claims_history_policy_numb.cf80ab",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM",
+      "display_name": "Update Claim Status",
+      "signature": "cf80ab9855e977be",
+      "config": {
+        "path": "/api/claims/history/{policy_number}",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "raw"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:09:19.024816Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:09:19.024816Z",
+      "instances": []
+    },
+    "cap.crm.api_claims_policy_policy_numbe.a9ba5b": {
+      "id": "cap.crm.api_claims_policy_policy_numbe.a9ba5b",
+      "layer": "capability",
+      "kind": "rest",
+      "system": "CRM",
+      "display_name": "Create Claim Record",
+      "signature": "a9ba5ba03193c711",
+      "config": {
+        "path": "/api/claims/policy/{policy_number}",
+        "method": "POST",
+        "auth_type": "None",
+        "body_type": "json"
+      },
+      "input_schema": "{\"claim_id\": \"\", \"policy_number\": \"\", \"patient_name\": \"\", \"treatment_date\": \"\", \"invoice_amount\": 0, \"outstanding_amount\": 0, \"validation_status\": \"\", \"validation_checks\": []}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:09:49.862856Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:09:49.862856Z",
+      "instances": []
+    },
+    "cap.email.op.dfefc8": {
+      "id": "cap.email.op.dfefc8",
+      "layer": "capability",
+      "kind": "smtp_email",
+      "system": "Email",
+      "display_name": "Dynamic Send Email",
+      "signature": "dfefc87e421e57a8",
+      "config": {
+        "path": "/",
+        "method": "GET",
+        "auth_type": "Bearer",
+        "body_type": "json"
+      },
+      "input_schema": "{}",
+      "component_type": null,
+      "created_at": "2026-06-30T07:09:53.822182Z",
+      "created_by_flow": "",
+      "version": 1,
+      "reused": false,
+      "reuse_count": 0,
+      "used_in_flows": [],
+      "last_used_at": "2026-06-30T07:09:53.822182Z",
       "instances": []
     }
   }
