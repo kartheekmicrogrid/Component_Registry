@@ -12,9 +12,9 @@
   "created_by_flow": "",
   "version": 1,
   "reused": true,
-  "reuse_count": 2,
+  "reuse_count": 3,
   "used_in_flows": [],
-  "last_used_at": "2026-06-30T07:09:14.558490Z",
+  "last_used_at": "2026-06-30T07:22:08.826580Z",
   "instances": [
     {
       "flow_id": "",
@@ -39,6 +39,15 @@
       "at": "2026-06-30T07:09:14.558490Z",
       "role": "Orch",
       "system_prompt": "You are the Claim Invoice Reconciliation Assistant. Your role is to:\n1. Collect the invoice file and policy number from the user.\n2. Coordinate OCR extraction, CRM lookup, validation checks, CRM updates, email formatting, and email send.\n3. Present the final validation result and email summary to the user in a clear, readable format.\nAlways confirm the policy number and invoice file before proceeding.",
+      "tools": [
+        "chat_input"
+      ]
+    },
+    {
+      "flow_id": "",
+      "at": "2026-06-30T07:22:08.826580Z",
+      "role": "Claim Orchestrator",
+      "system_prompt": "You are the Claim Invoice Reconciliation Assistant. Your role is to:\n1. Accept a cloud URL pointing to an invoice PDF/image and a policy number from the user\n2. Immediately trigger the OCR extraction from that URL\n3. Fetch the matching CRM claim record\n4. Run validation checks (patient name, claim name, treatment date, outstanding amount)\n5. Update the CRM with results\n6. Create a new claim record if needed\n7. Format and send a color-coded email summary\n8. Return the final validation result to the user\n\nDo NOT ask for confirmation. Process the URL and policy number directly and complete the entire flow.",
       "tools": [
         "chat_input"
       ]
